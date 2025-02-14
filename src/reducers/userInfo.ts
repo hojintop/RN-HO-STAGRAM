@@ -24,6 +24,12 @@ export const userInfoReducer = (
         ...state,
         userInfo: action.user,
       };
+    
+    case "GET_MY_FEED_SUCCESS" :
+        return{
+            ...state,
+            myFeedList: action.list
+        }
     default:
       return state;
   }

@@ -1,4 +1,4 @@
-import { ThunkAction } from "redux-thunk";
+import { ThunkAction, ThunkDispatch } from "redux-thunk";
 import { sleep } from "../utils/sleep";
 import { TypeRootReducer } from "../store";
 import { UserInfo } from "../@types/UserInfo";
@@ -102,6 +102,9 @@ export const getMyFeedList = (): TypeUserThunkAction => async (dispatch) => {
     ])
   );
 };
+
+// dispatch 타입 정의
+export type TypeUserDispatch = ThunkDispatch<TypeRootReducer,undefined, TypeUserInfoActions>;
 
 // 2.thunk action 에 대한 타입 정의
 export type TypeUserThunkAction = ThunkAction<

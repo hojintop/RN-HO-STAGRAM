@@ -49,18 +49,7 @@ export const getFeedList = ():TypeFeedListThunkAction => async (dispatch) => {
           name: "WRITE_NAME_01",
           uid: "WRITE_UID_01",
         },
-        imageUrl: "IMAGE_URI_01",
-        likeHistory: ["UID_01", "UID_02", "UID_03"],
-        createdAt: new Date().getTime(),
-      },
-      {
-        id: "ID_01",
-        content: "CONTENT_01",
-        writer: {
-          name: "WRITE_NAME_01",
-          uid: "WRITE_UID_01",
-        },
-        imageUrl: "IMAGE_URI_01",
+        imageUrl: "https://play-lh.googleusercontent.com/ND3C5KdLnm1MahmIs5punpQHRlLRoBvlZe_qMOBkAjpaGxeIRX1P5kNAp_TXvgKoRUA",
         likeHistory: ["UID_01", "UID_02", "UID_03"],
         createdAt: new Date().getTime(),
       },
@@ -71,7 +60,7 @@ export const getFeedList = ():TypeFeedListThunkAction => async (dispatch) => {
           name: "WRITE_NAME_02",
           uid: "WRITE_UID_02",
         },
-        imageUrl: "IMAGE_URI_02",
+        imageUrl: "https://play-lh.googleusercontent.com/ND3C5KdLnm1MahmIs5punpQHRlLRoBvlZe_qMOBkAjpaGxeIRX1P5kNAp_TXvgKoRUA",
         likeHistory: ["UID_01", "UID_02", "UID_03"],
         createdAt: new Date().getTime(),
       },
@@ -82,7 +71,18 @@ export const getFeedList = ():TypeFeedListThunkAction => async (dispatch) => {
           name: "WRITE_NAME_03",
           uid: "WRITE_UID_03",
         },
-        imageUrl: "IMAGE_URI_03",
+        imageUrl: "https://play-lh.googleusercontent.com/ND3C5KdLnm1MahmIs5punpQHRlLRoBvlZe_qMOBkAjpaGxeIRX1P5kNAp_TXvgKoRUA",
+        likeHistory: ["UID_01", "UID_02", "UID_03"],
+        createdAt: new Date().getTime(),
+      },
+      {
+        id: "ID_04",
+        content: "CONTENT_04",
+        writer: {
+          name: "WRITE_NAME_04",
+          uid: "WRITE_UID_04",
+        },
+        imageUrl: "https://play-lh.googleusercontent.com/ND3C5KdLnm1MahmIs5punpQHRlLRoBvlZe_qMOBkAjpaGxeIRX1P5kNAp_TXvgKoRUA",
         likeHistory: ["UID_01", "UID_02", "UID_03"],
         createdAt: new Date().getTime(),
       }
@@ -138,27 +138,45 @@ export const favoriteFeedRequest = () => {
     }
 }
 
-export const favoriteFeedSuccess = (feedId: FeedInfo["id"]) => {
+export const favoriteFeedSuccess = (feedId: FeedInfo["id"], myId:string, action:"add"|"del") => {
     return{
         type: FAVORITE_FEED_SUCCESS,
-        feedId
+        feedId,
+        myId,
+        action,
     }
 }
 
-export const favoriteFeedFailure = (feedId: FeedInfo["id"]) => {
+export const favoriteFeedFailure = () => {
     return{
         type: FAVORITE_FEED_FAILURE
     }
 }
 
 // thunk action
-export const favoriteFeed = (item:FeedInfo):TypeFeedListThunkAction => async (dispatch) => {
+export const favoriteFeed = (item:FeedInfo):TypeFeedListThunkAction => async (dispatch, getState) => {
     dispatch(favoriteFeedRequest());
+
+    const myId = getState().userInfo.userInfo?.uid || null;
+
+    if(myId === null){
+        dispatch(favoriteFeedFailure());
+        return;
+    }
 
     sleep(500);
 
-    dispatch(favoriteFeedSuccess(item.id));
+    // 현재 좋아요를 누른 사용자 항목에 내 아이디가 있다면 제외시키고 없다면 추가
+    const hasMyId = item.likeHistory.filter((likeUserId)=> likeUserId === myId).length > 0;
+    if(hasMyId){
+        dispatch(favoriteFeedSuccess(item.id,myId,"del"));
+    }else{
+        dispatch(favoriteFeedSuccess(item.id,myId,"add"));
+    }
 }
+
+// dispatch 타입 정의
+export type TypeFeedListDispatch = ThunkDispatch<TypeRootReducer,undefined, TypeFeedListActions>;
 
 // 2.thunk action 에 대한 타입 정의
 export type TypeFeedListThunkAction = ThunkAction<void, TypeRootReducer, undefined, TypeFeedListActions>;
