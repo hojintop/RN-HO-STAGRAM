@@ -5,7 +5,6 @@ export const MultiLineInput:React.FC<{
     value:string;
     onChangeText:(text:string)=>void;
     placeholder:string;
-    style:StyleProp<TextStyle>;
     fontSize?:number;
     height?:number;
     onSubmitEditing:()=>void;
@@ -28,7 +27,7 @@ export const MultiLineInput:React.FC<{
                 value={props.value}
                 onChangeText={props.onChangeText}
                 placeholder={props.placeholder}
-                style={[props.style,{fontSize: props.fontSize ?? 20, height:props.height ?? 200}]}
+                style={{fontSize: props.fontSize ?? 20, height:props.height ?? 200}}
                 onFocus={()=>{
                     setFocused(true);
                 }}
