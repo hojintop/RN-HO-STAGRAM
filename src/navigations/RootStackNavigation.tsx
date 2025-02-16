@@ -5,18 +5,13 @@ import { AddFeedScreen } from "../screens/AddFeedScreen";
 import { FeedListItem } from "../components/FeedListItem";
 import { FeedListScreen } from "../screens/FeedListScreen";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { FeedInfo } from "../@types/FeedInfo";
 
 export type RootStackParamList = {
     BottomTab: undefined,
     AddFeed: undefined,
     FeedList: {
-        list:{
-            id:string,
-            content:string,
-            writer:string,
-            imageUrl:string,
-            likeCount:number,
-        }[]
+        list:FeedInfo[]
     },
 }
 

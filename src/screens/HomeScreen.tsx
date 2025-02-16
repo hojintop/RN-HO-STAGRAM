@@ -8,9 +8,13 @@ import { FeedListItem } from "../components/FeedListItem";
 import { useDispatch } from "react-redux";
 import { getFeedList, TypeFeedListDispatch } from "../actions/feed";
 import { Spacer } from "../components/Spacer";
+import { HeaderButton } from "../components/Header/HeaderButton";
+import { useRootNavigation } from "../navigations/RootStackNavigation";
 
 export const HomeScreen: React.FC<{}> = (props) => {
   const feedTotalList = useTotalFeedList();
+  const navigation = useRootNavigation();
+
 
   //Thunk Action 발행
   const dispatch = useDispatch<TypeFeedListDispatch>();
@@ -23,6 +27,10 @@ export const HomeScreen: React.FC<{}> = (props) => {
     console.log(111);
   }
 
+  function onPressAddFeed(){
+    navigation.navigate("AddFeed");
+  }
+  
   function renderFeedItem({ item }: { item: FeedInfo }) {
     return (
       <FeedListItem
@@ -40,6 +48,7 @@ export const HomeScreen: React.FC<{}> = (props) => {
     <View style={{ flex: 1 }}>
       <Header>
         <HeaderTitle title="HOME"></HeaderTitle>
+        <HeaderButton iconName="add-outline" color="black" onPress={onPressAddFeed}/>
       </Header>
 
       <FlatList
