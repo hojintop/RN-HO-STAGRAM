@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { Header } from "../components/Header/Header"
 import { HeaderTitle } from "../components/Header/HeaderTitle"
 import { HeaderButton } from "../components/Header/HeaderButton"
@@ -8,11 +8,15 @@ import { FlatList, View } from "react-native"
 import { FeedInfo } from "../@types/FeedInfo"
 import { FeedListItem } from "../components/FeedListItem"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { useDispatch } from "react-redux"
+import { favoriteFeed, TypeFeedListDispatch } from "../actions/feed"
 
 export const FeedListScreen:React.FC<{}> = (props)=>{
+    const [isLike, setIsLike] = useState(false);
     const navigation = useRootNavigation();
     const route = useRootRoute<'FeedList'>();
     const inset = useSafeAreaInsets();
+    const dispatch = useDispatch<TypeFeedListDispatch>();
 
     function onPressClose(){
         navigation.goBack();
@@ -22,15 +26,21 @@ export const FeedListScreen:React.FC<{}> = (props)=>{
         console.log(111);
       }
 
+    function onPressLike(item:FeedInfo){
+        dispatch(favoriteFeed(item));
+        setIsLike(!isLike);
+    }
+
     function renderItem({item}:{item:FeedInfo}){
         return(
             <FeedListItem
             image={item.imageUrl}
-            isLiked={false}
+            isLiked={isLike}
             likeCount={item.likeHistory.length}
             writer={item.writer.name}
             comment={item.content}
             onPressFeed={onPressFeed}
+            onPressLike={()=>onPressLike(item)}
             />
         )
     }

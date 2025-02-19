@@ -7,5 +7,5 @@ export type FeedInfo = {
   };
   imageUrl: string;
   likeHistory: string[];
-  createdAt: number;
+  createdAt: string;
 };

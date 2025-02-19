@@ -1,11 +1,9 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import { FeedListItem } from './src/components/FeedListItem';
 import { useCallback } from 'react';
 import { RootApp } from './src/RootApp';
 import { Provider } from 'react-redux';
 import store from './src/store';
+
 
 export default function App() {
   const onPressFeed = useCallback(()=>{

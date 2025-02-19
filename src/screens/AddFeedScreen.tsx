@@ -12,10 +12,13 @@ import { RemoteImage } from "../components/RemoteImage";
 import Typography from "../components/Typography";
 import { Spacer } from "../components/Spacer";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useDispatch } from "react-redux";
+import { createFeed, TypeFeedListDispatch } from "../actions/feed";
 
 export const AddFeedScreen: React.FC<{}> = (props) => {
   const { width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
+  const dispatch = useDispatch<TypeFeedListDispatch>()
 
   const [content, setContent] = useState("");
   const [selectedPhotoUrl, setSelectedPhotoUrl] = useState<string | null>(null);
@@ -26,11 +29,18 @@ export const AddFeedScreen: React.FC<{}> = (props) => {
     navigation.goBack();
   }
 
-  function onPressAddFeed() {
+  async function onPressAddFeed() {
     if(!canSave){
       alert('사진과 내용을 입력해 주세요');
       return;
     }
+
+    await dispatch(createFeed({
+      content : content,
+      imageUrl : selectedPhotoUrl ?? "",
+    }))
+
+    navigation.goBack();
   }
 
   const canSave = useMemo(() => {
